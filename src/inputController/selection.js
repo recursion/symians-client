@@ -1,5 +1,4 @@
-import Rect from '../common/rect'
-import Point from '../common/point'
+import {Rect, Point} from 'symian-lib'
 
 /**
  * handles in-world selections

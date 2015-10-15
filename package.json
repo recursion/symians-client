@@ -21,6 +21,7 @@
     "postbuild:dist": "npm -s run copy-assets && npm -s run lint"
   },
   "dependencies": {
+    "socket.io-client": "^1.3.7",
     "pixi.js": "^3.0.7"
   },
   "devDependencies": {
@@ -42,7 +43,6 @@
     "karma-sinon-chai": "^1.1.0",
     "karma-webpack": "^1.7.0",
     "rimraf": "^2.4.3",
-    "socket.io-client": "^1.3.7",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.11.0"
   },

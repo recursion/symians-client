@@ -1,4 +1,4 @@
-import Rect from '../common/rect'
+import {Rect} from 'symian-lib'
 /**
  *  Camera is used to control the viewable portion of the world
  *  It is a simply a 'moveable' rectangle that contains another

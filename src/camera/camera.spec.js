@@ -1,4 +1,4 @@
-import Rect from '../common/rect'
+import {Rect} from 'symian-lib'
 import Camera from './camera'
 
 // Mocks
