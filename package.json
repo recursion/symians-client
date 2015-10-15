@@ -1,0 +1,52 @@
+{
+  "name": "tiley",
+  "version": "0.0.1",
+  "repository": "https://github.com/recursion/tiley",
+  "description": "Tilemap Game engine boiler-plate using pixi.js, ES6 and Webpack",
+  "config": {
+    "buildDir": "./dist"
+  },
+  "scripts": {
+    "start": "NODE_ENV=development webpack-dev-server --content-base ./dist/ --inline --host 0.0.0.0",
+    "webpack": "webpack -p --config ./webpack.config.js",
+    "test:cont": "nodemon --watch src --exec npm --silent run test",
+    "build:cont": "NODE_ENV=development webpack --watch -d --config ./webpack.config.js",
+    "build:dist": "NODE_ENV=production npm run webpack",
+    "clean": "rimraf $npm_package_config_buildDir && mkdir $npm_package_config_buildDir",
+    "test": "karma start --single-run",
+    "copy-assets": "cp -fr assets dist/",
+    "lint": "eslint ./src/**/*.js; exit 0",
+    "prestart": "npm install",
+    "prebuild:dist": "npm -s run clean",
+    "postbuild:dist": "npm -s run copy-assets && npm -s run lint"
+  },
+  "dependencies": {
+    "pixi.js": "^3.0.7"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.25",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.25",
+    "eslint": "^1.5.1",
+    "file-loader": "^0.8.4",
+    "html-loader": "^0.3.0",
+    "json-loader": "^0.5.3",
+    "karma": "^0.13.10",
+    "karma-babel-preprocessor": "^5.2.2",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-nyan-reporter": "^0.2.2",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-sinon-chai": "^1.1.0",
+    "karma-webpack": "^1.7.0",
+    "rimraf": "^2.4.3",
+    "socket.io-client": "^1.3.7",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.11.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
