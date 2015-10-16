@@ -18,7 +18,6 @@ export default function(app){
      * create a local world instance
      * using the data we recieved from the server
      */
-    console.log(data);
     app.world = new Zone(data.width, data.height);
     app.world.locations = data.locations;
     app.init();
@@ -31,7 +30,6 @@ export default function(app){
    * with any changed data
    */
   socket.on('world-update', (data)=> {
-    console.log('update', data);
     processWorldDataAsync(app, data.locations);
   });
 }
