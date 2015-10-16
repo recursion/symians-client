@@ -17,7 +17,7 @@ export default class Zone {
   constructor(width=0, height=0){
     this.width = width;
     this.height = height;
-    this.map = Zone.createMap(width, height);
+    this.locations = Zone.createMap(width, height);
   }
 
   /**
@@ -27,8 +27,10 @@ export default class Zone {
    *@returns {Location} - a location item or null
    */
   getLocation(x, y){
-    if (this.map[x] && this.map[x][y]){
-      return this.map[x][y];
+    let idx = (y*this.width)+x;
+    let loc = this.locations[idx];
+    if (loc){
+      return this.locations[idx];
     } else {
       return null;
     }
@@ -47,8 +49,6 @@ export default class Zone {
 
     for (let col = 0; col < width; col++){
 
-      map[col] = [];
-
       for (let row = 0; row < height; row++){
 
         if (col === 0 || col === width - 1 || row === 0 || row === width - 1){
@@ -61,7 +61,7 @@ export default class Zone {
 
         let tile = {type: type, x: col, y: row, width: tilesize, height: tilesize, contents: []};
 
-        map[col][row] = tile;//tile;
+        map[row*width+col] = tile;//tile;
 
       }
     }

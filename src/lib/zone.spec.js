@@ -15,29 +15,28 @@ describe('Zone', ()=> {
   it('has a height property', ()=> {
     expect(zone).to.have.property('height');
   });
-  it('has a map property', ()=> {
-    expect(zone).to.have.property('map');
+  it('has a locations property', ()=> {
+    expect(zone).to.have.property('locations');
   });
   describe('#getLocation', ()=> {
     it('returns null when given invalid coordinates', ()=> {
       let z = new Zone(10, 10);
-      let l = z.getLocation(11, 1);
+      let l = z.getLocation(11, 11);
       expect(l).to.be.null;
     });
     it('returns a map location when given valid inputs', ()=> {
       let z = new Zone(10, 10);
       let l = z.getLocation(1, 1);
-      expect(l).to.equal(z.map[1][1]);
+      expect(l).to.equal(z.locations[11]);
     });
   });
   describe('::createMap', ()=> {
     it('returns an empty array when given no arguments', ()=> {
       expect(Array.isArray(Zone.createMap())).to.equal(true);
     });
-    it('returns a (height-length)array of (width-length)arrays.', ()=> {
+    it('returns an array of length height*width', ()=> {
       let z = Zone.createMap(32, 32);
-      expect(z.length).to.equal(32);
-      expect(z[0].length).to.equal(32);
+      expect(z.length).to.equal(32*32);
     });
   });
 });
