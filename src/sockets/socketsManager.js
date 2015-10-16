@@ -63,7 +63,7 @@ function processWorldDataAsync(app, data, startCol = 0, startRow = 0){
        * if we have been, reschedule the rest of the work.
        */
       return setTimeout(()=>{
-        app.processWorldDataAsync(app, data, col, row);
+        processWorldDataAsync(app, data, col, row);
       }, 0);
     }
 
