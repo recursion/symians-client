@@ -1,4 +1,4 @@
-import {Rect, Point} from '../lib'
+import {Rect, Point} from 'symians-lib'
 
 /**
  * handles in-world selections

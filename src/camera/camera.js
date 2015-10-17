@@ -1,4 +1,4 @@
-import {Rect} from '../lib'
+import {Rect} from 'symians-lib'
 /**
  *  Camera is used to control the viewable portion of the world
  *  It is a simply a 'moveable' rectangle that contains another

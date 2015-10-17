@@ -6,7 +6,7 @@
  */
 import {Container} from 'pixi.js';
 import RendererStore from '../renderer/RendererStore'
-import {Rect} from '../lib'
+import {Rect} from 'symians-lib'
 import Camera from '../camera/camera'
 import Tile from './tile'
 

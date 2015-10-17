@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import Zone from '../lib/zone'
+import Zone from 'symians-lib'
 
 export default function(app){
   let socket = io('http://localhost:3000');
