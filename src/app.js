@@ -29,7 +29,7 @@ class App {
     this.renderer = RendererStore.renderer = new Renderer(TILESIZE);
 
     // TODO: subscribe to server data instead
-    this.world = null; //new Zone(MAPWIDTH, MAPHEIGHT);
+    this.zone = null; //new Zone(MAPWIDTH, MAPHEIGHT);
 
 
     /**
@@ -65,16 +65,16 @@ class App {
    */
   init(){
 
-    this.inputController = new InputController(this.world);
+    this.inputController = new InputController(this.zone);
     this.initKeyControls();
 
     /**
      * Initialize the application view
      */
-    this.worldView = new WorldView(this.world, this.inputController);
+    this.zoneView = new WorldView(this.zone, this.inputController);
 
     // add the main view to the renderer
-    this.renderer.target = new AppView(this.worldView);
+    this.renderer.target = new AppView(this.zoneView);
 
     // start rendering
     this.renderer.start();
