@@ -5,8 +5,7 @@ export default function(app){
   let socket = io('http://localhost:3000');
 
   socket.on('connect', () => {
-    //
-    console.log('Connected');
+    //console.log('Connected');
   });
 
 
@@ -19,23 +18,42 @@ export default function(app){
      * create a local world instance
      * using the data we recieved from the server
      */
-    app.zone = new Zone(data.width, data.height);
-    console.log(data);
-    app.zone.locations = data.locations;
+    const zone = new Zone(data.width, data.height);
+    zone.locations = data.locations;
+    zone.mobs = data.mobs;
 
-    app.init();
-    socket.emit('world-loaded');
+    socket.emit('zone-loaded');
+    app.init(zone);
   });
 
+
+  socket.on('create', (data)=> {
+    // add this object to a list of renderables
+    //app.zone.mobs.push(JSON.parse(data));
+  });
 
   /**
-   * do a full zone update by updating each cell
-   * with any changed data
+   * a game object has updated
    */
-  socket.on('zone-update', (data)=> {
-    console.log('wut');
+  socket.on('update', (data)=> {
+    // update an objects local data
+    data = JSON.parse(data);
+
+    // TODO: turn mobs into a set so we get constant time access
+    app.zone.mobs.forEach((mob, idx)=>{
+      if (mob.key === data.key){
+        app.zone.mobs[idx] = Object.assign({}, mob, data);
+      }
+    });
+
     //processZoneDataAsync(app, data.locations);
   });
+
+  /* a game object was created */
+  socket.on('create', (data)=> {
+    //processZoneDataAsync(app, data.locations);
+  });
+
 }
 
 
@@ -72,7 +90,10 @@ function processZoneDataAsync(app, data, startCol = 0, startRow = 0){
     }
 
     /**
-     * process a row
+     * process and update a row
+     * existing properties are overwritten with new ones.
+     * local models tend to have some properties that will not
+     * exist on the data packet.
      */
     for (; row < data[0].length; row++){
       app.zone.locations[row*app.zone.width+col] = Object.assign(app.zone.locations[row*app.zone.width+col], data[row*app.zone.width+col]);

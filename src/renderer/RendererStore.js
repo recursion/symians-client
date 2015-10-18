@@ -46,11 +46,15 @@ class RendererStore extends EventEmitter {
    * @param {number} row - a map row (aka y coord)
    * @returns {number, number}  - translated coordinates
    */
-  translateCoords(col, row){
+  translateCoords(col, row, modify=true){
     const modifiedCol = Math.round(col / this.get('tilesize'));
     const modifiedRow = Math.round(row / this.get('tilesize'));
-    const x =  (modifiedCol % this.widthInTiles) + this.data.camera.x;
-    const y =  (modifiedRow % this.heightInTiles) + this.data.camera.y;
+    if (modify){
+      col = modifiedCol;
+      row = modifiedRow;
+    }
+    const x =  (col % this.widthInTiles) + this.data.camera.x;
+    const y =  (row % this.heightInTiles) + this.data.camera.y;
     return [x, y];
   }
 

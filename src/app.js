@@ -11,7 +11,7 @@ import * as keys from './constants/KeyConstants'
 import RendererStore from './renderer/RendererStore'
 import Renderer from './renderer/renderer'
 import AppView from './displayobjects/appView'
-import WorldView from './displayobjects/worldview'
+import ZoneView from './displayobjects/zoneView'
 import InputController from './inputController/inputController'
 import socketsManager from './sockets/socketsManager'
 
@@ -54,7 +54,7 @@ class App {
    * work to do once all assets are loaded
    */
   onAssetsLoaded(){
-    // add a reference to our spritesheet textures on to our world store
+    // add a reference to our spritesheet textures on to our store
     RendererStore.set('terrainTextures', this.loader.resources.terrain.textures);
 
     socketsManager(this);
@@ -63,15 +63,16 @@ class App {
   /**
    * only do this once we have some data from the server
    */
-  init(){
+  init(zone){
 
+    this.zone = zone;
     this.inputController = new InputController(this.zone);
     this.initKeyControls();
 
     /**
      * Initialize the application view
      */
-    this.zoneView = new WorldView(this.zone, this.inputController);
+    this.zoneView = new ZoneView(this.zone, this.inputController);
 
     // add the main view to the renderer
     this.renderer.target = new AppView(this.zoneView);
