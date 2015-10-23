@@ -4,7 +4,7 @@
  * @exports ZoneView
  * @extends Container
  */
-import {Container} from 'pixi.js';
+import {Sprite, Container} from 'pixi.js';
 import RendererStore from '../renderer/RendererStore'
 import {Rect} from 'symians-lib'
 import Camera from '../camera/camera'
@@ -77,6 +77,18 @@ export default class ZoneView extends Container {
 
         // add the tiles sprite to our view container
         this.addChild(loc.sprite);
+
+        // check for other objects at this location
+        if (loc.contents.length){
+          let obj = loc.contents[0];
+          if (obj){
+            if (!obj.sprite){
+              obj.sprite = new SymSprite(obj.type.toLowerCase(), col, row, 16, this.inputController);
+            }
+            obj.sprite.set(col, row);
+            this.addChild(obj.sprite);
+          }
+        }
       }
     });
 

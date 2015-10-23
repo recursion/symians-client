@@ -18,7 +18,6 @@ export default function(app){
      * create a local world instance
      * using the data we recieved from the server
      */
-    console.log('got zone');
     const zone = new Zone(data.width, data.height);
     zone.locations = data.locations;
     zone.mobs = data.mobs;
@@ -33,6 +32,7 @@ export default function(app){
     /**
      * create sprites from our zone object
      */
+
     const zone = inflateZone(data);
     socket.emit('zone-loaded');
     app.init(zone);
@@ -48,7 +48,7 @@ export default function(app){
    */
   socket.on('update', (data)=> {
     // update an objects local data
-    data = JSON.parse(data);
+    //data = JSON.parse(data);
 
     /*
     // TODO: turn mobs into a set so we get constant time access
@@ -73,10 +73,24 @@ function inflateZone(data){
   let zObject = JSON.parse(data);
   const zone = new Zone(zObject.width, zObject.height);
   zone.locations = zObject.locations;
-  //data.objects.forEach((obj)=>{
+  // convert contents to json objects
+  // still not sure why these are showing up here...
+  // todo: find out why contents are showing up inside of locations!
+  zone.locations.forEach((loc)=>{
+    loc.contents.forEach((o, i)=>{
+      loc.contents[i] = JSON.parse(o);
+    });
+  });
+  /*
+  zObject.objects.forEach((obj)=>{
     // insert each object into its proper location in the zone
+    // get this objects location
 
-  //});
+    const loc = zone.getLocation(obj.x, obj.y);
+    // add the object to that locations contents array
+    zone.placeItem(obj, loc);
+  });
+  */
   return zone;
 }
 
