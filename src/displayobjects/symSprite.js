@@ -77,7 +77,7 @@ export default class SymSprite extends Sprite {
    * and redraw it
    */
   onMouseOver(){
-    //this.inputController.selection.add(this.x, this.y)
+    this.inputController.selection.add(this.x, this.y)
   }
 
   /**
@@ -85,14 +85,14 @@ export default class SymSprite extends Sprite {
    * and start selecting a new selection
    */
   onMouseDown(){
-    //this.inputController.selection.start(this.x, this.y)
+    this.inputController.selection.start(this.x, this.y)
   }
 
   /**
    * stop selecting
    */
   onMouseUp(){
-    //this.inputController.selection.stop(this.x, this.y)
+    this.inputController.selection.stop(this.x, this.y)
   }
 }
 
