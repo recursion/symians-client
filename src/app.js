@@ -56,7 +56,6 @@ class App {
   onAssetsLoaded(){
     // add a reference to our spritesheet textures on to our store
     RendererStore.set('terrainTextures', this.loader.resources.terrain.textures);
-
     socketsManager(this);
   }
 

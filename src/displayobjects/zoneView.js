@@ -79,6 +79,8 @@ export default class ZoneView extends Container {
         this.addChild(loc.sprite);
       }
     });
+
+    /*
     this.zone.mobs.forEach((mob)=>{
       // if the mob is in the bounds of the camera
       const TILESIZE = RendererStore.get('tilesize');
@@ -100,6 +102,7 @@ export default class ZoneView extends Container {
       }
 
     });
+    */
   }
 }
 

@@ -21,12 +21,12 @@ export default class Tile extends Sprite {
    * @param {number} height - the height of the tile
    */
   constructor(type='grass', x = 0, y = 0, tilesize = 16, inputController) {
-    super();
+    super(getTextureByType(type));
 
     this.inputController = inputController;
 
     this.tilesize = tilesize;
-    this.texture = this.getTextureByType(type);
+    //this.texture = this.getTextureByType(type);
     this.set(x, y);
 
     this.interactive = true;
@@ -51,23 +51,7 @@ export default class Tile extends Sprite {
     this.height = this.tilesize;
   }
 
-  /**
-   * gets a pixi texture by string type
-   * @param {string} type - the image type to use as the texture
-   * @returns {PIXI.Texture} - the texture
-   */
-  getTextureByType(type){
-    switch(type){
-      case 'grass':
-        return RendererStore.get('terrainTextures')['sprite6'];
-      case 'water':
-        return RendererStore.get('terrainTextures')['sprite1'];
-      case 'wall':
-        return RendererStore.get('terrainTextures')['sprite743'];
-      default:
-        throw new Error('Invalid terrain when it should default???');
-    }
-  }
+
 
   /**
    * if we are already selecting stuff,
@@ -91,5 +75,24 @@ export default class Tile extends Sprite {
    */
   onMouseUp(){
     this.inputController.selection.stop(this.x, this.y)
+  }
+}
+
+/**
+ * gets a pixi texture by string type
+ * @param {string} type - the image type to use as the texture
+ * @returns {PIXI.Texture} - the texture
+ */
+function getTextureByType(type){
+  switch(type){
+    case 'grass':
+      return RendererStore.get('terrainTextures')['sprite6'];
+    case 'dirt':
+      return RendererStore.get('terrainTextures')['sprite64'];
+    case 'water':
+      return RendererStore.get('terrainTextures')['sprite1'];
+    default:
+      console.error(type);
+      throw new Error('Invalid terrain when it should default???');
   }
 }

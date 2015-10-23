@@ -18,6 +18,7 @@ export default function(app){
      * create a local world instance
      * using the data we recieved from the server
      */
+    console.log('got zone');
     const zone = new Zone(data.width, data.height);
     zone.locations = data.locations;
     zone.mobs = data.mobs;
@@ -26,6 +27,16 @@ export default function(app){
     app.init(zone);
   });
 
+  // receive the zone created message
+  // and the zone object
+  socket.on('zoneCreated', (data)=>{
+    /**
+     * create sprites from our zone object
+     */
+    const zone = inflateZone(data);
+    socket.emit('zone-loaded');
+    app.init(zone);
+  });
 
   socket.on('create', (data)=> {
     // add this object to a list of renderables
@@ -39,12 +50,14 @@ export default function(app){
     // update an objects local data
     data = JSON.parse(data);
 
+    /*
     // TODO: turn mobs into a set so we get constant time access
     app.zone.mobs.forEach((mob, idx)=>{
       if (mob.key === data.key){
         app.zone.mobs[idx] = Object.assign({}, mob, data);
       }
     });
+    */
 
     //processZoneDataAsync(app, data.locations);
   });
@@ -56,6 +69,16 @@ export default function(app){
 
 }
 
+function inflateZone(data){
+  let zObject = JSON.parse(data);
+  const zone = new Zone(zObject.width, zObject.height);
+  zone.locations = zObject.locations;
+  //data.objects.forEach((obj)=>{
+    // insert each object into its proper location in the zone
+
+  //});
+  return zone;
+}
 
 /**
  * process zone updates asynchronously
