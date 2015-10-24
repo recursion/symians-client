@@ -76,11 +76,6 @@ function inflateZone(data){
   // convert contents to json objects
   // still not sure why these are showing up here...
   // todo: find out why contents are showing up inside of locations!
-  zone.locations.forEach((loc)=>{
-    loc.contents.forEach((o, i)=>{
-      loc.contents[i] = JSON.parse(o);
-    });
-  });
   /*
   zObject.objects.forEach((obj)=>{
     // insert each object into its proper location in the zone

@@ -58,8 +58,10 @@ export default class SymSprite extends Sprite {
    */
   getTextureByType(type){
     switch(type){
-      case 'tree':
+      case 'bush':
         return RendererStore.get('terrainTextures')['sprite518'];
+      case 'tree':
+        return RendererStore.get('terrainTextures')['sprite523'];
       case 'grass':
         return RendererStore.get('terrainTextures')['sprite669'];
       case 'wall':
