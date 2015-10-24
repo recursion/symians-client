@@ -73,19 +73,6 @@ function inflateZone(data){
   let zObject = JSON.parse(data);
   const zone = new Zone(zObject.width, zObject.height);
   zone.locations = zObject.locations;
-  // convert contents to json objects
-  // still not sure why these are showing up here...
-  // todo: find out why contents are showing up inside of locations!
-  /*
-  zObject.objects.forEach((obj)=>{
-    // insert each object into its proper location in the zone
-    // get this objects location
-
-    const loc = zone.getLocation(obj.x, obj.y);
-    // add the object to that locations contents array
-    zone.placeItem(obj, loc);
-  });
-  */
   return zone;
 }
 
