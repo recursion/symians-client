@@ -32,7 +32,7 @@ export default class Selection {
     const loc = this._worldStore.getLocation(x, y);
     this._selected.push(loc);
 
-    loc.sprite.tint = 0xcccccc;
+    loc.tint = 0xcccccc;
   }
 
   /**
@@ -85,7 +85,7 @@ export default class Selection {
    */
   removeTint(){
     this._selected.forEach((tile)=> {
-      tile.sprite.tint = (0xffffff);
+      tile.tint = (0xffffff);
     });
   }
 

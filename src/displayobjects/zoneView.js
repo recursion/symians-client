@@ -65,29 +65,18 @@ export default class ZoneView extends Container {
 
       if(loc){
 
-        // if the sprite doesnt exist
-        if (!loc.sprite){
-          // create it
-          loc.sprite = new Tile(loc.type, col, row, RendererStore.get('tilesize'), this.inputController);
-        }
-
         // set the tile sprites coordinates
         // and its width/height
-        loc.sprite.set(col, row);
+        loc.set(col, row);
 
         // add the tiles sprite to our view container
-        this.addChild(loc.sprite);
+        this.addChild(loc);
 
         // check for other objects at this location
         if (loc.contents.length){
-          let obj = loc.contents[0];
-          if (obj){
-            if (!obj.sprite){
-              obj.sprite = new SymSprite(obj.type.toLowerCase(), col, row, 16, this.inputController);
-            }
-            obj.sprite.set(col, row);
-            this.addChild(obj.sprite);
-          }
+          const obj = loc.contents[0];
+          obj.set(col, row);
+          this.addChild(obj);
         }
       }
     });

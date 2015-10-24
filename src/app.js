@@ -14,6 +14,8 @@ import AppView from './displayobjects/appView'
 import ZoneView from './displayobjects/zoneView'
 import InputController from './inputController/inputController'
 import socketsManager from './sockets/socketsManager'
+import Tile from './displayobjects/tile'
+import SymSprite from './displayobjects/symSprite'
 
 const TILESIZE = 16;
 
@@ -66,6 +68,7 @@ class App {
 
     this.zone = zone;
     this.inputController = new InputController(this.zone);
+    this.zone = this.convertZoneObjectsToSprites(zone, this.inputController);
     this.initKeyControls();
 
     /**
@@ -80,6 +83,20 @@ class App {
     this.renderer.start();
   }
 
+  /**
+   * convert location objects and thier contents to sprites
+   */
+  convertZoneObjectsToSprites(zone, ioController){
+    let size = RendererStore.get('tilesize');
+    zone.locations.forEach((loc, i)=>{
+      const newSprite = Object.assign(new Tile(loc.type, loc.x, loc.y, size, ioController), loc);
+      zone.locations[i] = newSprite;
+      zone.locations[i].contents.forEach((o, idx)=>{
+        loc.contents[idx] = Object.assign(new SymSprite(o.type.toLowerCase(), o.x, o.y, size, ioController), o);
+      });
+    });
+    return zone;
+  }
 
   /*
    * initialize keyboard controls

@@ -76,6 +76,7 @@ function inflateZone(data){
   return zone;
 }
 
+
 /**
  * process zone updates asynchronously
  * @param {ZoneInstance} data
