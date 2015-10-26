@@ -20,12 +20,13 @@ export default class SymSprite extends Sprite {
    * @param {number} width - the width of the tile
    * @param {number} height - the height of the tile
    */
-  constructor(type='none', x = 0, y = 0, tilesize = 16, inputController) {
+  constructor(type='none', x = 0, y = 0, size = 16, inputController) {
     super();
 
     this.inputController = inputController;
 
-    this.tilesize = tilesize;
+    this.tilesize = RendererStore.get('tilesize');
+    this.size = size;
     this.texture = this.getTextureByType(type);
     this.set(x, y);
 
@@ -47,8 +48,8 @@ export default class SymSprite extends Sprite {
   set(x, y){
     this.x = x * this.tilesize;
     this.y = y * this.tilesize;
-    this.width = this.tilesize;
-    this.height = this.tilesize;
+    this.width = this.size;
+    this.height = this.size;
   }
 
   /**
@@ -66,9 +67,12 @@ export default class SymSprite extends Sprite {
         return RendererStore.get('terrainTextures')['sprite669'];
       case 'wall':
         return RendererStore.get('terrainTextures')['sprite743'];
+      case 'squirrel':
+        return RendererStore.get('terrainTextures')['sprite1336'];
       case 'mob':
         return RendererStore.get('terrainTextures')['sprite651'];
       default:
+        console.error('GOT: ', type);
         throw new Error('Invalid terrain when it should default???');
     }
   }

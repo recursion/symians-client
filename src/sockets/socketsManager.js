@@ -10,6 +10,29 @@ export default function(app){
 
 
   /**
+   * object grow event
+   */
+  socket.on('grow', (obj)=>{
+
+    const objects = JSON.parse(obj);
+
+    // find the object in the client zone storage
+
+    // make sure the app is initialized
+    if (app.zone){
+      objects.forEach((obj)=>{
+        let x = app.zone.objects[obj.id];
+        if(x){
+          x.size = obj.size;
+        }
+      });
+    }
+
+
+  });
+
+
+  /**
    * initial map/world load
    */
   socket.on('zone-init', (data)=> {
@@ -20,7 +43,6 @@ export default function(app){
      */
     const zone = new Zone(data.width, data.height);
     zone.locations = data.locations;
-    zone.mobs = data.mobs;
 
     socket.emit('zone-loaded');
     app.init(zone);

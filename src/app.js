@@ -88,11 +88,14 @@ class App {
    */
   convertZoneObjectsToSprites(zone, ioController){
     let size = RendererStore.get('tilesize');
+    zone.objects = {};
     zone.locations.forEach((loc, i)=>{
       const newSprite = Object.assign(new Tile(loc.type, loc.x, loc.y, size, ioController), loc);
       zone.locations[i] = newSprite;
       zone.locations[i].contents.forEach((o, idx)=>{
-        loc.contents[idx] = Object.assign(new SymSprite(o.type.toLowerCase(), o.x, o.y, size, ioController), o);
+        const newO = Object.assign(new SymSprite(o.type.toLowerCase(), o.x, o.y, o.size, ioController), o);
+        loc.contents[idx] = newO;
+        zone.objects[o.id] = newO;
       });
     });
     return zone;

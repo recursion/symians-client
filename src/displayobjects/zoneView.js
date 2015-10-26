@@ -54,7 +54,7 @@ export default class ZoneView extends Container {
   draw(){
 
     // clear all children from the last frame
-    this.removeChildren();
+    //this.removeChildren();
 
     // iterate through the map locations currently visible to the camera
     let viewableZone = new Rect(0, 0, this.camera.width, this.camera.height);
