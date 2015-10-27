@@ -22,10 +22,14 @@ export default class Camera extends Rect{
       y = 0,
       width = 0,
       height = 0,
-      bounds = new Rect(0, 0, 0, 0)
+      bounds = new Rect(0, 0, 0, 0),
+      moverate=125
   ){
     super(x, y, width, height);
+    this.lastXMove = 0;
+    this.lastYMove = 0;
     this.bounds = bounds;
+    this.moverate = moverate;
   }
 
   /**
@@ -46,11 +50,14 @@ export default class Camera extends Rect{
    *@returns {boolean} - true for success, false for failure
    */
   left(){
-    if (this.x > this.bounds.x){
-      this.x -= 1;
-      return true;
-    } else {
-      return false;
+    if(this.lastXMove === 0 || Date.now() - this.lastXMove > this.moverate){
+      if (this.x > this.bounds.x){
+        this.x -= 1;
+        this.lastXMove = Date.now();
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -60,11 +67,14 @@ export default class Camera extends Rect{
    */
   right(){
     //if (this.x + this.width < this.map.width){
-    if (this.x + this.width < this.bounds.width){
-      this.x += 1;
-      return true;
-    } else {
-      return false;
+    if(this.lastXMove === 0 || Date.now() - this.lastXMove > this.moverate){
+      if (this.x + this.width < this.bounds.width){
+        this.x += 1;
+        this.lastXMove = Date.now();
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -73,13 +83,17 @@ export default class Camera extends Rect{
    *@returns {boolean} - true for success, false for failure
    */
   up(){
-    if (this.y > this.bounds.y){
-      this.y -= 1;
-      return true;
-    } else {
-      return false;
+    if(this.lastYMove === 0 || Date.now() - this.lastYMove > this.moverate){
+      if (this.y > this.bounds.y){
+        this.y -= 1;
+        this.lastYMove = Date.now();
+        return true;
+      } else {
+        return false;
+      }
     }
   }
+
 
   /**
    * increments the cameras y coordinate
@@ -87,11 +101,14 @@ export default class Camera extends Rect{
    */
   down(){
     //if (this.y + this.height < this.map.height){
-    if (this.y + this.height < this.bounds.height){
-      this.y += 1;
-      return true;
-    } else {
-      return false;
+    if(this.lastYMove === 0 || Date.now() - this.lastYMove > this.moverate){
+      if (this.y + this.height < this.bounds.height){
+        this.y += 1;
+        this.lastYMove = Date.now();
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 

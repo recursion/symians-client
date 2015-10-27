@@ -33,6 +33,10 @@ class App {
     // TODO: subscribe to server data instead
     this.zone = null; //new Zone(MAPWIDTH, MAPHEIGHT);
 
+    this.started = false;
+
+    // queue objects not created yet
+    this.objectCreationQueue = [];
 
     /**
      * create an asset loader
@@ -81,6 +85,42 @@ class App {
 
     // start rendering
     this.renderer.start();
+    this.started = true;
+  }
+
+  /**
+   * determine whether to create a new game object
+   * now or add it to a queue and do it later
+   * @param {GObj} obj - the object to create
+   */
+  createNew(obj){
+    if (this.started){
+      if (this.objectCreationQueue.length){
+        this.objectCreationQueue.forEach((obj)=>{
+          this.create(obj);
+        });
+        this.objectCreationQueue = [];
+      } else {
+        this.create(obj);
+      }
+    } else {
+      this.objectCreationQueue.push(obj);
+    }
+  }
+
+  /**
+   * create a new object in game
+   * @param {GObj} obj - the object to create
+   */
+  create(obj){
+    const loc = this.zone.getLocation(obj.x, obj.y);
+    if(loc){
+      if(!this.zone.objects[obj.id]){
+        const newO = Object.assign(new SymSprite(obj.type.toLowerCase(), obj.x, obj.y, obj.size, this.inputController), obj);
+        loc.contents.push(newO);
+        this.zone.objects[obj.id] = newO;
+      }
+    }
   }
 
   /**

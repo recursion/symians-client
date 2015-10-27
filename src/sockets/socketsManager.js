@@ -8,6 +8,10 @@ export default function(app){
     //console.log('Connected');
   });
 
+  socket.on('create', (obj)=>{
+    const parsed = JSON.parse(obj);
+    app.createNew(parsed);
+  });
 
   /**
    * object grow event
@@ -52,10 +56,6 @@ export default function(app){
     app.init(zone);
   });
 
-  socket.on('create', (data)=> {
-    // add this object to a list of renderables
-    //app.zone.mobs.push(JSON.parse(data));
-  });
 
   /**
    * a game object has updated
@@ -73,11 +73,6 @@ export default function(app){
     });
     */
 
-    //processZoneDataAsync(app, data.locations);
-  });
-
-  /* a game object was created */
-  socket.on('create', (data)=> {
     //processZoneDataAsync(app, data.locations);
   });
 
@@ -136,6 +131,11 @@ function processZoneDataAsync(app, data, startCol = 0, startRow = 0){
   }
 }
 
+/**
+ * nonblocking method of iterating through an array of objects
+ * @param {App} app - the application instance
+ * @param {Array} objects - an array of objects that need updating
+ */
 function processObjectUpdates(app, objects){
 
   const startTime = Date.now();
@@ -151,9 +151,9 @@ function processObjectUpdates(app, objects){
       } else {
         return setTimeout(()=>{
 
-          processObjectUpdate(app, object.slice(idx));
+          processObjectUpdates(app, objects.slice(idx));
 
-        });
+        }, 1);
       }
     });
   }
