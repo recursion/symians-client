@@ -70,6 +70,11 @@ class App {
    */
   init(zone){
 
+    if(this.started){
+      this.renderer.stop();
+      this.started = false;
+    }
+
     this.zone = zone;
     this.inputController = new InputController(this.zone);
     this.zone = this.convertZoneObjectsToSprites(zone, this.inputController);
@@ -93,7 +98,7 @@ class App {
    * now or add it to a queue and do it later
    * @param {GObj} obj - the object to create
    */
-  createNew(obj){
+  createNew(objects){
     if (this.started){
       if (this.objectCreationQueue.length){
         this.objectCreationQueue.forEach((obj)=>{
@@ -101,10 +106,12 @@ class App {
         });
         this.objectCreationQueue = [];
       } else {
-        this.create(obj);
+        objects.forEach((obj)=>{
+          this.create(obj);
+        });
       }
     } else {
-      this.objectCreationQueue.push(obj);
+      this.objectCreationQueue = this.objectCreationQueue.concat(objects);
     }
   }
 

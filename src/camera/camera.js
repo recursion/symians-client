@@ -23,11 +23,12 @@ export default class Camera extends Rect{
       width = 0,
       height = 0,
       bounds = new Rect(0, 0, 0, 0),
-      moverate=125
+      moverate=60
   ){
     super(x, y, width, height);
     this.lastXMove = 0;
     this.lastYMove = 0;
+    this.moved = true;
     this.bounds = bounds;
     this.moverate = moverate;
   }
@@ -54,10 +55,14 @@ export default class Camera extends Rect{
       if (this.x > this.bounds.x){
         this.x -= 1;
         this.lastXMove = Date.now();
+        this.moved = true;
         return true;
       } else {
         return false;
       }
+    } else {
+      this.moved = false;
+      return false;
     }
   }
 
@@ -71,10 +76,14 @@ export default class Camera extends Rect{
       if (this.x + this.width < this.bounds.width){
         this.x += 1;
         this.lastXMove = Date.now();
+        this.moved = true;
         return true;
       } else {
         return false;
       }
+    } else {
+      this.moved = false;
+      return false;
     }
   }
 
@@ -87,10 +96,14 @@ export default class Camera extends Rect{
       if (this.y > this.bounds.y){
         this.y -= 1;
         this.lastYMove = Date.now();
+        this.moved = true;
         return true;
       } else {
         return false;
       }
+    } else {
+      this.moved = false;
+      return false;
     }
   }
 
@@ -105,11 +118,16 @@ export default class Camera extends Rect{
       if (this.y + this.height < this.bounds.height){
         this.y += 1;
         this.lastYMove = Date.now();
+        this.moved = true;
         return true;
       } else {
         return false;
       }
+    } else {
+      this.moved = false;
+      return false;
     }
+
   }
 
   /**

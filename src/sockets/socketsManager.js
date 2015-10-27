@@ -16,7 +16,7 @@ export default function(app){
   /**
    * object grow event
    */
-  socket.on('grow', (obj)=>{
+  socket.on('change', (obj)=>{
 
     const objects = JSON.parse(obj);
 
@@ -85,52 +85,6 @@ function inflateZone(data){
   return zone;
 }
 
-
-/**
- * process zone updates asynchronously
- * @param {ZoneInstance} data
- * @param {number} startCol
- * @param {number} startRow
- * @returns {null}
- */
-function processZoneDataAsync(app, data, startCol = 0, startRow = 0){
-  const maxBlockTime = 15;
-  const starttime = Date.now();
-
-
-  let col = startCol;
-  let row = startRow;
-
-  /**
-   * start iterating through rows of map data
-   */
-  for(; col < data.length; col++){
-
-    /**
-     * make sure we havnt been processing too long.
-     */
-    if(Date.now() - starttime >= maxBlockTime){
-      /**
-       * if we have been, reschedule the rest of the work.
-       */
-      return setTimeout(()=>{
-        processZoneDataAsync(app, data, col, row);
-      }, 0);
-    }
-
-    /**
-     * process and update a row
-     * existing properties are overwritten with new ones.
-     * local models tend to have some properties that will not
-     * exist on the data packet.
-     */
-    for (; row < data[0].length; row++){
-      app.zone.locations[row*app.zone.width+col] = Object.assign(app.zone.locations[row*app.zone.width+col], data[row*app.zone.width+col]);
-    }
-
-  }
-}
-
 /**
  * nonblocking method of iterating through an array of objects
  * @param {App} app - the application instance
@@ -151,9 +105,9 @@ function processObjectUpdates(app, objects){
       } else {
         return setTimeout(()=>{
 
-          processObjectUpdates(app, objects.slice(idx));
+          processObjectUpdates(app, objects.slice(idx + 1));
 
-        }, 1);
+        }, 10);
       }
     });
   }

@@ -31,6 +31,8 @@ export default class ZoneView extends Container {
     const [zoneSize, screenSizeInTiles] = Camera.getBounds(zone, RendererStore);
     this.camera = Camera.create(zoneSize, screenSizeInTiles);
 
+    this.lastDraw = Date.now();
+
     /* setup the renderer */
     RendererStore.set('camera', this.camera);
     RendererStore.addChangeListener(this.resizeHandler.bind(this));
@@ -53,33 +55,38 @@ export default class ZoneView extends Container {
    */
   draw(){
 
-    // clear all children from the last frame
-    //this.removeChildren();
 
-    // iterate through the map locations currently visible to the camera
-    let viewableZone = new Rect(0, 0, this.camera.width, this.camera.height);
-    viewableZone.forEach((col, row)=>{
-      // attempt to get the location
-      // from the iterations current row and col
-      let loc = this.zone.getLocation( this.camera.x + col, this.camera.y + row );
+    if(this.camera.moved || Date.now() - this.lastDraw > 250){
+      // clear all children from the last frame
+      this.removeChildren();
 
-      if(loc){
+      // iterate through the map locations currently visible to the camera
+      let viewableZone = new Rect(0, 0, this.camera.width, this.camera.height);
+      viewableZone.forEach((col, row)=>{
+        // attempt to get the location
+        // from the iterations current row and col
+        let loc = this.zone.getLocation( this.camera.x + col, this.camera.y + row );
 
-        // set the tile sprites coordinates
-        // and its width/height
-        loc.set(col, row);
+        if(loc){
 
-        // add the tiles sprite to our view container
-        this.addChild(loc);
+          // set the tile sprites coordinates
+          // and its width/height
+          loc.set(col, row);
 
-        // check for other objects at this location
-        if (loc.contents.length){
-          const obj = loc.contents[0];
-          obj.set(col, row);
-          this.addChild(obj);
+          // add the tiles sprite to our view container
+          this.addChild(loc);
+
+          // check for other objects at this location
+          if (loc.contents.length){
+            const obj = loc.contents[0];
+            obj.set(col, row);
+            this.addChild(obj);
+          }
         }
-      }
-    });
+      });
+      this.camera.moved = false;
+      this.lastDraw = Date.now();
+    }
 
     /*
     this.zone.mobs.forEach((mob)=>{
