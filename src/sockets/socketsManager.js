@@ -19,16 +19,8 @@ export default function(app){
     // find the object in the client zone storage
 
     // make sure the app is initialized
-    if (app.zone){
-      objects.forEach((obj)=>{
-        let x = app.zone.objects[obj.id];
-        if(x){
-          x.size = obj.size;
-        }
-      });
-    }
 
-
+    processObjectUpdates(app, objects);
   });
 
 
@@ -142,4 +134,28 @@ function processZoneDataAsync(app, data, startCol = 0, startRow = 0){
     }
 
   }
+}
+
+function processObjectUpdates(app, objects){
+
+  const startTime = Date.now();
+
+  if (app.zone){
+    objects.forEach((obj, idx)=>{
+
+      if(Date.now() - startTime < 15){
+        let x = app.zone.objects[obj.id];
+        if(x){
+          x.size = obj.size;
+        }
+      } else {
+        return setTimeout(()=>{
+
+          processObjectUpdate(app, object.slice(idx));
+
+        });
+      }
+    });
+  }
+
 }
