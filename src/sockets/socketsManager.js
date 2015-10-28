@@ -8,25 +8,10 @@ export default function(app){
     //console.log('Connected');
   });
 
-  socket.on('create', (obj)=>{
-    const parsed = JSON.parse(obj);
-    app.createNew(parsed);
+  socket.on('update', (obj)=>{
+    const updates = JSON.parse(obj);
+    processUpdates(app, updates);
   });
-
-  /**
-   * object grow event
-   */
-  socket.on('change', (obj)=>{
-
-    const objects = JSON.parse(obj);
-
-    // find the object in the client zone storage
-
-    // make sure the app is initialized
-
-    processObjectUpdates(app, objects);
-  });
-
 
   /**
    * initial map/world load
@@ -55,31 +40,11 @@ export default function(app){
     socket.emit('zone-loaded');
     app.init(zone);
   });
-
-
-  /**
-   * a game object has updated
-   */
-  socket.on('update', (data)=> {
-    // update an objects local data
-    //data = JSON.parse(data);
-
-    /*
-    // TODO: turn mobs into a set so we get constant time access
-    app.zone.mobs.forEach((mob, idx)=>{
-      if (mob.key === data.key){
-        app.zone.mobs[idx] = Object.assign({}, mob, data);
-      }
-    });
-    */
-
-    //processZoneDataAsync(app, data.locations);
-  });
-
 }
 
 function inflateZone(data){
   let zObject = JSON.parse(data);
+
   const zone = new Zone(zObject.width, zObject.height);
   zone.locations = zObject.locations;
   return zone;
@@ -90,26 +55,38 @@ function inflateZone(data){
  * @param {App} app - the application instance
  * @param {Array} objects - an array of objects that need updating
  */
-function processObjectUpdates(app, objects){
+function processUpdates(app, events){
 
   const startTime = Date.now();
 
   if (app.zone){
-    objects.forEach((obj, idx)=>{
-
-      if(Date.now() - startTime < 15){
-        let x = app.zone.objects[obj.id];
-        if(x){
-          x.size = obj.size;
-        }
-      } else {
-        return setTimeout(()=>{
-
-          processObjectUpdates(app, objects.slice(idx + 1));
-
-        }, 10);
+    events.forEach((event, idx)=>{
+      switch(event.type){
+        case 'create':
+          app.createNew(event.object);
+          break;
+        case 'change':
+          if(Date.now() - startTime < 15){
+            let x = app.zone.objects[event.object.id];
+            if(x){
+              x.size = event.object.size;
+              x.age = event.object.age;
+            }
+          } else {
+            return setTimeout(()=>{
+              processUpdates(app, events.slice(idx));
+            }, 1);
+          }
+          break;
+        default:
+          break;
       }
     });
+  } else {
+    // not initialized yet
+    // try again later
+    setTimeout(()=>{
+      processUpdates(app, events);
+    }, 10);
   }
-
 }

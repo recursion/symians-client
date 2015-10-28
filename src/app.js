@@ -98,7 +98,7 @@ class App {
    * now or add it to a queue and do it later
    * @param {GObj} obj - the object to create
    */
-  createNew(objects){
+  createNew(obj){
     if (this.started){
       if (this.objectCreationQueue.length){
         this.objectCreationQueue.forEach((obj)=>{
@@ -106,12 +106,10 @@ class App {
         });
         this.objectCreationQueue = [];
       } else {
-        objects.forEach((obj)=>{
-          this.create(obj);
-        });
+        this.create(obj);
       }
     } else {
-      this.objectCreationQueue = this.objectCreationQueue.concat(objects);
+      this.objectCreationQueue.push(obj);
     }
   }
 
