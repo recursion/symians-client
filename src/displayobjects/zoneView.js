@@ -11,6 +11,8 @@ import Camera from '../camera/camera'
 import Tile from './tile'
 import SymSprite from './symSprite'
 
+const TIMEMODIFIER = 1000;
+
 /*
  * Zone Viewer
  */
@@ -79,6 +81,12 @@ export default class ZoneView extends Container {
           // check for other objects at this location
           if (loc.contents.length){
             const obj = loc.contents[0];
+
+
+            const currentAge = Math.floor((Date.now() - obj.created) / TIMEMODIFIER);
+
+            obj.size = Math.floor(currentAge / obj.growthRate) % 16 ;
+
             obj.set(col, row);
             this.addChild(obj);
           }

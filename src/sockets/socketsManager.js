@@ -60,28 +60,38 @@ function processUpdates(app, events){
   const startTime = Date.now();
 
   if (app.zone){
-    events.forEach((event, idx)=>{
-      switch(event.type){
-        case 'create':
-          app.createNew(event.object);
-          break;
-        case 'change':
-          if(Date.now() - startTime < 15){
-            let x = app.zone.objects[event.object.id];
-            if(x){
-              x.size = event.object.size;
-              x.age = event.object.age;
-            }
-          } else {
-            return setTimeout(()=>{
-              processUpdates(app, events.slice(idx));
+    for (let i = 0; i < events.length; i++){
+
+      let event = events[i];
+      if(Date.now() - startTime < 15){
+        switch(event.type){
+
+          case 'create':
+            app.createNew(event.object);
+            break;
+
+          case 'change':
+            setTimeout(()=>{
+              let x = app.zone.objects[event.object.id];
+              if(x){
+                x.state = event.object.state;
+                //x.size = event.object.size;
+                //x.age = event.object.age;
+              }
             }, 1);
-          }
-          break;
-        default:
-          break;
+            break;
+
+          default:
+            window.console.error('Recieved unknown event type: ', event.type);
+            break;
+        }
+      } else {
+        setTimeout(()=>{
+          processUpdates(app, events.slice(i));
+        }, 1);
+        break;
       }
-    });
+    }
   } else {
     // not initialized yet
     // try again later
