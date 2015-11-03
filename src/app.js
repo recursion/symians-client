@@ -10,12 +10,11 @@ import {loaders} from 'pixi.js'
 import * as keys from './constants/KeyConstants'
 import RendererStore from './renderer/RendererStore'
 import Renderer from './renderer/renderer'
-import AppView from './displayobjects/appView'
-import ZoneView from './displayobjects/zoneView'
+import AppView from './views/appView'
+import ZoneView from './views/zoneView'
 import InputController from './inputController/inputController'
 import socketsManager from './sockets/socketsManager'
-import Tile from './displayobjects/tile'
-import SymSprite from './displayobjects/symSprite'
+import * as SpriteFactory from './displayobjects/spriteFactory'
 
 const TILESIZE = 16;
 
@@ -77,7 +76,7 @@ class App {
 
     this.zone = zone;
     this.inputController = new InputController(this.zone);
-    this.zone = this.convertZoneObjectsToSprites(zone, this.inputController);
+    this.zone = SpriteFactory.convertZoneDataToSprites(zone, this.inputController);
     this.initKeyControls();
 
     /**
@@ -102,48 +101,15 @@ class App {
     if (this.started){
       if (this.objectCreationQueue.length){
         this.objectCreationQueue.forEach((obj)=>{
-          this.create(obj);
+          SpriteFactory.create(obj, zone);
         });
         this.objectCreationQueue = [];
       } else {
-        this.create(obj);
+        SpriteFactory.create(obj, this.zone);
       }
     } else {
       this.objectCreationQueue.push(obj);
     }
-  }
-
-  /**
-   * create a new object in game
-   * @param {GObj} obj - the object to create
-   */
-  create(obj){
-    const loc = this.zone.getLocation(obj.x, obj.y);
-    if(loc){
-      if(!this.zone.objects[obj.id]){
-        const newO = Object.assign(new SymSprite(obj.type.toLowerCase(), obj.x, obj.y, obj.size, this.inputController), obj);
-        loc.contents.push(newO);
-        this.zone.objects[obj.id] = newO;
-      }
-    }
-  }
-
-  /**
-   * convert location objects and thier contents to sprites
-   */
-  convertZoneObjectsToSprites(zone, ioController){
-    let size = RendererStore.get('tilesize');
-    zone.objects = {};
-    zone.locations.forEach((loc, i)=>{
-      const newSprite = Object.assign(new Tile(loc.type, loc.x, loc.y, size, ioController), loc);
-      zone.locations[i] = newSprite;
-      zone.locations[i].contents.forEach((o, idx)=>{
-        const newO = Object.assign(new SymSprite(o.type.toLowerCase(), o.x, o.y, o.size, ioController), o);
-        loc.contents[idx] = newO;
-        zone.objects[o.id] = newO;
-      });
-    });
-    return zone;
   }
 
   /*

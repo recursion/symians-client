@@ -4,12 +4,13 @@
  * @exports ZoneView
  * @extends Container
  */
-import {Sprite, Container} from 'pixi.js';
+//import {Sprite, Container} from 'pixi.js';
+import {Container} from 'pixi.js';
 import RendererStore from '../renderer/RendererStore'
 import {Rect} from 'symians-lib'
 import Camera from '../camera/camera'
-import Tile from './tile'
-import SymSprite from './symSprite'
+//import Tile from './tile'
+//import SymSprite from './symSprite'
 
 const TIMEMODIFIER = 1000;
 
@@ -56,8 +57,7 @@ export default class ZoneView extends Container {
    * and draws it
    */
   draw(){
-
-
+    const TILESIZE = RendererStore.get('tilesize');
     if(this.camera.moved || Date.now() - this.lastDraw > 250){
       // clear all children from the last frame
       this.removeChildren();
@@ -83,9 +83,17 @@ export default class ZoneView extends Container {
             const obj = loc.contents[0];
 
 
+            /**
+             * TODO: Currently we are assuming everything here is just a plant.
+             * Soon there will be other types of objects and they will have different
+             * techniques for drawing. Probably objects should just be responsible
+             * for drawing themselves.
+             */
             const currentAge = Math.floor((Date.now() - obj.created) / TIMEMODIFIER);
 
-            obj.size = Math.floor(currentAge / obj.growthRate) % 16 ;
+            if (obj.size < TILESIZE){
+              obj.size = Math.floor(currentAge / obj.growthRate);
+            }
 
             obj.set(col, row);
             this.addChild(obj);
