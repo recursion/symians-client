@@ -49,12 +49,6 @@ export default class Squirrel extends Sprite {
   }
 
   draw(col, row, timeModifier){
-    /**
-     * TODO: Currently we are assuming everything here is just a plant.
-     * Soon there will be other types of objects and they will have different
-     * techniques for drawing. Probably objects should just be responsible
-     * for drawing themselves.
-     */
     const currentAge = Math.floor((Date.now() - this.created) / timeModifier);
 
     this.size = Math.floor(currentAge / this.growthRate);
