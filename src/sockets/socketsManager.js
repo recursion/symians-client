@@ -67,7 +67,7 @@ function processUpdates(app, events){
         switch(event.type){
 
           case 'create':
-            app.createNew(event.object);
+            app.createNewDisplayObject(event.object);
             break;
 
           case 'change':

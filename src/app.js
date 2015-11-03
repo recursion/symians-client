@@ -93,19 +93,20 @@ class App {
   }
 
   /**
-   * determine whether to create a new game object
-   * now or add it to a queue and do it later
+   * create and add a sprite/game object to the display
+   * - if the app has not started (still loading zone)
+   *   then we add these objects to a queue, and create them later
    * @param {GObj} obj - the object to create
    */
-  createNew(obj){
+  createNewDisplayObject(obj){
     if (this.started){
       if (this.objectCreationQueue.length){
         this.objectCreationQueue.forEach((obj)=>{
-          SpriteFactory.create(obj, zone);
+          SpriteFactory.create(obj, zone, this.inputController);
         });
         this.objectCreationQueue = [];
       } else {
-        SpriteFactory.create(obj, this.zone);
+        SpriteFactory.create(obj, this.zone, this.inputController);
       }
     } else {
       this.objectCreationQueue.push(obj);
