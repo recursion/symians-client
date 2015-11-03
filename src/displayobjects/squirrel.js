@@ -1,7 +1,7 @@
 /**
- * Tree
+ * Squirrel
  *
- * @exports Grass
+ * @exports Squirrel
  * @extends Sprite
  */
 
@@ -9,9 +9,9 @@ import {Sprite} from 'pixi.js';
 import RendererStore from '../renderer/RendererStore'
 
 /**
-  Creates a Tree object
+ * Creates a Squirrel object
  **/
-export default class Tree extends Sprite {
+export default class Squirrel extends Sprite {
 
   /*
    */
@@ -22,7 +22,8 @@ export default class Tree extends Sprite {
 
     this.tilesize = RendererStore.get('tilesize');
     this.size = size;
-    this.texture = RendererStore.get('terrainTextures')['sprite523'];
+    this.texture = RendererStore.get('terrainTextures')['sprite1336'];
+
     this.set(x, y);
 
     this.interactive = true;
@@ -68,7 +69,6 @@ export default class Tree extends Sprite {
 
     this.set(col, row);
   }
-
 
   /**
    * if we are already selecting stuff,

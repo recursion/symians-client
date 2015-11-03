@@ -57,7 +57,6 @@ export default class ZoneView extends Container {
    * and draws it
    */
   draw(){
-    const TILESIZE = RendererStore.get('tilesize');
     if(this.camera.moved || Date.now() - this.lastDraw > 250){
       // clear all children from the last frame
       this.removeChildren();
@@ -82,20 +81,7 @@ export default class ZoneView extends Container {
           if (loc.contents.length){
             const obj = loc.contents[0];
 
-
-            /**
-             * TODO: Currently we are assuming everything here is just a plant.
-             * Soon there will be other types of objects and they will have different
-             * techniques for drawing. Probably objects should just be responsible
-             * for drawing themselves.
-             */
-            const currentAge = Math.floor((Date.now() - obj.created) / TIMEMODIFIER);
-
-            if (obj.size < TILESIZE){
-              obj.size = Math.floor(currentAge / obj.growthRate);
-            }
-
-            obj.set(col, row);
+            obj.draw(col, row, TIMEMODIFIER);
             this.addChild(obj);
           }
         }

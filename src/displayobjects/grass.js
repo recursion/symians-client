@@ -15,7 +15,7 @@ export default class Grass extends Sprite {
 
   /*
    */
-  constructor(x = 0, y = 0, size = 15, inputController) {
+  constructor(x = 0, y = 0, size = 0, inputController) {
     super();
 
     this.inputController = inputController;
@@ -45,6 +45,28 @@ export default class Grass extends Sprite {
     this.y = y * this.tilesize;
     this.width = this.size;
     this.height = this.size;
+  }
+
+  draw(col, row, timeModifier){
+    /**
+     * TODO: Currently we are assuming everything here is just a plant.
+     * Soon there will be other types of objects and they will have different
+     * techniques for drawing. Probably objects should just be responsible
+     * for drawing themselves.
+     */
+    const currentAge = Math.floor((Date.now() - this.created) / timeModifier);
+
+    this.size = Math.floor(currentAge / this.growthRate);
+
+    /**
+     * gotta keep objects below tilesize
+     * (for now)
+     */
+    if (this.size >= this.tilesize){
+      this.size = this.tilesize;
+    }
+
+    this.set(col, row);
   }
 
   /**
